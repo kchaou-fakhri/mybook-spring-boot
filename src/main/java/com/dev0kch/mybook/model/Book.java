@@ -2,6 +2,8 @@ package com.dev0kch.mybook.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,7 +21,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private int id;
 
     @NotBlank(message = "La valeur titre ne peut pas etre vide")
     private String title;
@@ -29,8 +31,8 @@ public class Book {
     @NotBlank(message = "La valeur description ne peut pas etre vide")
     private String description;
 
-    @NotBlank(message = "La valeur id_author  ne peut pas etre vide")
-    private long id_author;
+    @Column(name = "id_author")
+    private String id_author;
 
     @NotBlank(message = "La valeur image  ne peut pas etre vide")
     private String image;
@@ -42,19 +44,19 @@ public class Book {
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
+    @UpdateTimestamp
     private Date updatedAt;
 
     public Book() {
 
     }
 
-    public Book(long id,long id_author, String description, String title, String image, String file,  Date createdAt, Date updatedAt) {
+    public Book(int id,String id_author, String description, String title, String image, String file,  Date createdAt, Date updatedAt) {
         this.id = id;
         this.id_author = id_author;
         this.description = description;
@@ -74,19 +76,19 @@ public class Book {
         this.description = description;
     }
 
-    public long getId_author() {
+    public String getId_author() {
         return id_author;
     }
 
-    public void setId_author(long id_author) {
+    public void setId_author(String id_author) {
         this.id_author = id_author;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

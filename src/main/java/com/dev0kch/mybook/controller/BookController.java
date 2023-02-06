@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class BookController {
@@ -16,7 +17,7 @@ public class BookController {
     BookRepository bookRepository;
 
     @GetMapping("book/{id}")
-    public Book findById(@PathVariable Long id){
+    public Book findById(@PathVariable int id){
         return bookRepository._findById(id);
     }
 
