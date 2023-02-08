@@ -38,15 +38,23 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public String generateToken(@RequestBody AuthRequest authRequest)throws Exception{
+        String token = "";
         try {
 
 
             User user = userRepository.findByUsername(authRequest.getUsername());
-            if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())){
+            if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword()) &&
+                        user.getUsername().equals(authRequest.getUsername())){
+
                 authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+                        new UsernamePasswordAuthenticationToken(authRequest.getUsername(), user.getPassword())
                 );
+                token = jwtUtil.generateToken(authRequest.getUsername());
+            }else {
+                throw new Exception("Invalid username or password");
+
             }
+
 
 
         }catch (Exception e){
@@ -54,14 +62,19 @@ public class AuthController {
             throw new Exception("Invalid username or password");
         }
 
-       return jwtUtil.generateToken(authRequest.getUsername());
+       return token;
     }
 
     @PutMapping("/authenticate/register")
-    public void login(@RequestBody User user){
+    public void login(@RequestBody User user) throws Exception {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
-        userRepository.save(user);
+        if (userRepository.findByUsername(user.getUsername()) == null){
+            userRepository.save(user);
+        }
+        else {
+            throw new Exception("username is already exist");
+        }
     }
 
 }
