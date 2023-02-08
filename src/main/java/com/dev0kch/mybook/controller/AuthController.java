@@ -14,10 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 
 @RestController
 public class AuthController {
@@ -40,18 +39,19 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity generateToken(@RequestBody AuthRequest authRequest)throws Exception{
-        ResponseEntity<String> token;
+        ResponseEntity token;
         try {
 
 
             User user = userRepository.findByUsername(authRequest.getUsername());
             if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword()) &&
-                        user.getUsername().equals(authRequest.getUsername())){
+                    user.getUsername().equals(authRequest.getUsername())){
 
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(authRequest.getUsername(), user.getPassword())
                 );
-                token = new ResponseEntity( jwtUtil.generateToken(authRequest.getUsername()), HttpStatus.OK);
+                token = ResponseEntity.status( HttpStatus.OK).body(
+                        Collections.singletonMap("authorization",jwtUtil.generateToken(authRequest.getUsername())));
             }else {
                 throw new Exception("Invalid username or password");
 
@@ -64,7 +64,7 @@ public class AuthController {
             throw new Exception("Invalid username or password");
         }
 
-       return token;
+        return token;
     }
 
     @PutMapping("/authenticate/register")
