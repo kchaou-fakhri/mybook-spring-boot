@@ -7,6 +7,8 @@ import com.dev0kch.mybook.repository.UserRepository;
 import com.dev0kch.mybook.service.CustomUserDetailsService;
 import com.dev0kch.mybook.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,8 +39,8 @@ public class AuthController {
     private UserRepository userRepository;
 
     @PostMapping("/authenticate")
-    public String generateToken(@RequestBody AuthRequest authRequest)throws Exception{
-        String token = "";
+    public ResponseEntity generateToken(@RequestBody AuthRequest authRequest)throws Exception{
+        ResponseEntity<String> token;
         try {
 
 
@@ -49,7 +51,7 @@ public class AuthController {
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(authRequest.getUsername(), user.getPassword())
                 );
-                token = jwtUtil.generateToken(authRequest.getUsername());
+                token = new ResponseEntity( jwtUtil.generateToken(authRequest.getUsername()), HttpStatus.OK);
             }else {
                 throw new Exception("Invalid username or password");
 
