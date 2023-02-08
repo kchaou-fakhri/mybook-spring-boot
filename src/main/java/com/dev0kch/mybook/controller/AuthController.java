@@ -77,4 +77,19 @@ public class AuthController {
         }
     }
 
+
+    // if response is true, the token is expired
+    // if response is false, the token is valid
+    @PostMapping("/authenticate/validate_token")
+    public Boolean validateToken(@RequestBody  String token){
+        boolean isValidateToken= true;
+        try {
+            isValidateToken =  jwtUtil.isTokenExpired(token);
+        }catch (Exception e){
+            isValidateToken = true;
+        }
+        return isValidateToken;
+    }
+
+
 }
