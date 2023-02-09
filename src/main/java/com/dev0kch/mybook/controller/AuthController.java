@@ -7,6 +7,7 @@ import com.dev0kch.mybook.repository.UserRepository;
 import com.dev0kch.mybook.service.CustomUserDetailsService;
 import com.dev0kch.mybook.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,8 +51,11 @@ public class AuthController {
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(authRequest.getUsername(), user.getPassword())
                 );
-                token = ResponseEntity.status( HttpStatus.OK).body(
-                        Collections.singletonMap("authorization",jwtUtil.generateToken(authRequest.getUsername())));
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.add("authorization", jwtUtil.generateToken(authRequest.getUsername()));
+
+//                token = ResponseEntity.ok().header(responseHeaders.toString()).body("Success");
+                token = new ResponseEntity(responseHeaders, HttpStatus.OK);
             }else {
                 throw new Exception("Invalid username or password");
 
