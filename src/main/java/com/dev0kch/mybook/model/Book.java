@@ -29,6 +29,7 @@ public class Book {
 
 
     @NotBlank(message = "La valeur description ne peut pas etre vide")
+    @Lob
     private String description;
 
     @Column(name = "id_author")
