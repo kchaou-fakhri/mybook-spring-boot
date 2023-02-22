@@ -22,9 +22,15 @@ public class BookController {
     }
 
     @PostMapping(value = "book/save")
-    public void updateBook(@RequestBody Book book)
+    public void createBook(@RequestBody Book book)
     {
         bookRepository.save(book);
+    }
+
+    @PostMapping(value = "book/saveall")
+    public void saveAllBook(@RequestBody List<Book> books)
+    {
+        bookRepository.saveAll(books);
     }
 
     @GetMapping("/books")
