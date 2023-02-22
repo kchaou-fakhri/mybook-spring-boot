@@ -21,7 +21,7 @@ public class BookController {
         return bookRepository._findById(id);
     }
 
-    @PutMapping(value = "book/save")
+    @PostMapping(value = "book/save")
     public void updateBook(@RequestBody Book book)
     {
         bookRepository.save(book);

@@ -71,7 +71,7 @@ public class AuthController {
         return token;
     }
 
-    @PutMapping("/authenticate/register")
+    @PostMapping("/authenticate/register")
     public void login(@RequestBody User user) throws Exception {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
