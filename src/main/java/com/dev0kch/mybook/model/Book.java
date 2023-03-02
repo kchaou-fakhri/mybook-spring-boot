@@ -35,6 +35,8 @@ public class Book {
     @Column(name = "id_author")
     private String id_author;
 
+    @Column(name = "price")
+    private Double price;
     @NotBlank(message = "La valeur image  ne peut pas etre vide")
     private String image;
 
@@ -57,13 +59,14 @@ public class Book {
 
     }
 
-    public Book(int id,String id_author, String description, String title, String image, String file,  Date createdAt, Date updatedAt) {
+    public Book(int id,String id_author, String description, String title, String image, String file, Double price,  Date createdAt, Date updatedAt) {
         this.id = id;
         this.id_author = id_author;
         this.description = description;
         this.title = title;
         this.image = image;
         this.file = file;
+        this.price = price;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -131,5 +134,13 @@ public class Book {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
