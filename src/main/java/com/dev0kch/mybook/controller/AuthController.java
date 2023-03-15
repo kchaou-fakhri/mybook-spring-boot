@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 public class AuthController {
@@ -96,6 +97,20 @@ public class AuthController {
             isValidateToken = true;
         }
         return isValidateToken;
+    }
+
+    @PostMapping("users/delete")
+    public void delete(@RequestBody Long id) throws Exception {
+
+        userRepository.deleteById(id);
+
+    }
+
+    @GetMapping("users")
+    public List<String> getAll() throws Exception {
+
+       return userRepository.findAllUsername();
+
     }
 
 
