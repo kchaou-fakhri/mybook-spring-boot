@@ -72,7 +72,7 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate/register")
-    public void login(@RequestBody User user) throws Exception {
+    public User login(@RequestBody User user) throws Exception {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         if (userRepository.findByUsername(user.getUsername()) == null){
@@ -81,6 +81,7 @@ public class AuthController {
         else {
             throw new Exception("username is already exist");
         }
+        return user;
     }
 
 
