@@ -100,18 +100,16 @@ public class AuthController {
     }
 
     @PostMapping("users/delete")
-    public void delete(@RequestBody Long id) throws Exception {
+    public void delete(@RequestBody Long id){
 
         userRepository.deleteById(id);
 
-    }
-
-    @GetMapping("users")
-    public List<String> getAll() throws Exception {
-
-       return userRepository.findAllUsername();
 
     }
+
+
+
+
 
 
 }
