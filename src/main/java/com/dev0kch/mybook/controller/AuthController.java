@@ -4,7 +4,6 @@ package com.dev0kch.mybook.controller;
 import com.dev0kch.mybook.model.AuthRequest;
 import com.dev0kch.mybook.model.User;
 import com.dev0kch.mybook.repository.UserRepository;
-import com.dev0kch.mybook.service.CustomUserDetailsService;
 import com.dev0kch.mybook.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,12 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
 
 @RestController
 public class AuthController {
@@ -72,7 +68,7 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate/register")
-    public void login(@RequestBody User user) throws Exception {
+    public User login(@RequestBody User user) throws Exception {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         if (userRepository.findByUsername(user.getUsername()) == null){
@@ -81,21 +77,42 @@ public class AuthController {
         else {
             throw new Exception("username is already exist");
         }
+        return user;
     }
 
 
     // if response is true, the token is expired
     // if response is false, the token is valid
     @PostMapping("/authenticate/validate_token")
-    public Boolean validateToken(@RequestBody  String token){
+    public ResponseEntity validateToken(@RequestBody  String token){
         boolean isValidateToken= true;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        ResponseEntity response;
         try {
             isValidateToken =  jwtUtil.isTokenExpired(token);
+
         }catch (Exception e){
             isValidateToken = true;
         }
-        return isValidateToken;
+        finally {
+            responseHeaders.add("check_token", String.valueOf(isValidateToken));
+            response = new ResponseEntity(responseHeaders, HttpStatus.OK);
+        }
+
+        return response;
     }
+
+    @PostMapping("users/delete")
+    public void delete(@RequestBody Long id){
+
+        userRepository.deleteById(id);
+
+
+    }
+
+
+
+
 
 
 }
