@@ -37,13 +37,9 @@ public class Category {
     private Date updatedAt;
 
 
+
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "categories")
+    @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "categories")
     private Set<Book> books= new HashSet<>();
 
 }

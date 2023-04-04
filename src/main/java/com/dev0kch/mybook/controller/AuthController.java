@@ -83,7 +83,7 @@ public class AuthController {
 
     // if response is true, the token is expired
     // if response is false, the token is valid
-    @PostMapping("/authenticate/validate_token")
+        @PostMapping("/authenticate/validate_token")
     public ResponseEntity validateToken(@RequestBody  String token){
         boolean isValidateToken= true;
         HttpHeaders responseHeaders = new HttpHeaders();
