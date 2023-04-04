@@ -4,6 +4,7 @@ package com.dev0kch.mybook.controller;
 
 import com.dev0kch.mybook.model.Book;
 import com.dev0kch.mybook.model.Category;
+import com.dev0kch.mybook.model.Filter;
 import com.dev0kch.mybook.repository.BookRepository;
 import com.dev0kch.mybook.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +63,18 @@ public class BookController {
     }
 
     @GetMapping("book/by_category")
-    public List<Book> findAllBookByCategories(@RequestBody List<Long> list_id){
+    public List<Book> findAllBookByCategories(@RequestBody Filter filter){
 
 
-        return bookRepository.findAllBookByCategories(list_id);
+        List<Book> books = new ArrayList<>() ;
+
+        for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
+            if (!books.contains(book)){
+                books.add(book);
+            }
+        }
+
+        return books;
     }
 
 }

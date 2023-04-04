@@ -55,6 +55,9 @@ public class Book {
 
     @Column(name = "price")
     private Double price;
+
+    @Column(name = "language")
+    private String language;
     @NotBlank(message = "La valeur image  ne peut pas etre vide")
     private String image;
 
