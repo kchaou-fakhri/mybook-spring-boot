@@ -1,7 +1,11 @@
 package com.dev0kch.mybook.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,12 +14,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "books")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Book {
 
 
@@ -26,6 +33,17 @@ public class Book {
     @NotBlank(message = "La valeur titre ne peut pas etre vide")
     private String title;
 
+
+
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "book_categories",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns =  @JoinColumn(name =  "category_id" )
+    )
+    private List<Category> categories  = new ArrayList<>();
 
 
     @NotBlank(message = "La valeur description ne peut pas etre vide")
@@ -55,92 +73,9 @@ public class Book {
     @UpdateTimestamp
     private Date updatedAt;
 
-    public Book() {
-
-    }
-
-    public Book(int id,String id_author, String description, String title, String image, String file, Double price,  Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.id_author = id_author;
-        this.description = description;
-        this.title = title;
-        this.image = image;
-        this.file = file;
-        this.price = price;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public void addCategory(Category category) {
+        categories.add(category);
     }
 
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getId_author() {
-        return id_author;
-    }
-
-    public void setId_author(String id_author) {
-        this.id_author = id_author;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getFile() {
-        return file;
-    }
-
-    public void setFile(String file) {
-        this.file = file;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
 }
