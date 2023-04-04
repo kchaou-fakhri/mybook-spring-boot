@@ -9,6 +9,7 @@ import com.dev0kch.mybook.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -60,9 +61,11 @@ public class BookController {
         bookRepository.deleteById(id);
     }
 
-    @GetMapping("book/by_category/{category_id}")
-    public List<Book> findAllBookByCategories(@PathVariable ("category_id") Long category_id){
-        return bookRepository.findAllBookByCategories(category_id);
+    @GetMapping("book/by_category")
+    public List<Book> findAllBookByCategories(@RequestBody List<Long> list_id){
+
+
+        return bookRepository.findAllBookByCategories(list_id);
     }
 
 }
