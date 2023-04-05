@@ -1,10 +1,12 @@
 package com.dev0kch.mybook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +22,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+
 
     public Long getId() {
         return id;
