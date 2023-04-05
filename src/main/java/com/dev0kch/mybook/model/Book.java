@@ -28,13 +28,14 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @NotBlank(message = "La valeur titre ne peut pas etre vide")
     private String title;
 
 
 
+    private Double review;
 
     @JsonIgnore
     @ManyToMany
@@ -44,6 +45,8 @@ public class Book {
             inverseJoinColumns =  @JoinColumn(name =  "category_id" )
     )
     private List<Category> categories  = new ArrayList<>();
+
+
 
 
     @NotBlank(message = "La valeur description ne peut pas etre vide")

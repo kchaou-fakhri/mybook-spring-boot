@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Integer> {
+public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = "Select * FROM books  WHERE id = ?1", nativeQuery = true)
-    Book _findById(int id);
+    Book _findById(Long id);
 
     @Query(value = "SELECT DISTINCT * FROM books book INNER JOIN book_categories t2 " +
             "ON book.id = t2.book_id WHERE t2.category_id in :categories AND book.language in :languages", nativeQuery = true)
