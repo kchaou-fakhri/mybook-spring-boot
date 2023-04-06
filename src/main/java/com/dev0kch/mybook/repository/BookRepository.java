@@ -15,8 +15,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Book _findById(Long id);
 
     @Query(value = "SELECT DISTINCT * FROM books book INNER JOIN book_categories t2 " +
-            "ON book.id = t2.book_id WHERE t2.category_id in :categories AND book.language in :languages", nativeQuery = true)
-    ArrayList<Book> findAllBookByCategories(@Param("categories") List<Long> categories, @Param("languages") List<String> languages);
+            "ON book.id = t2.book_id " +
+            "INNER JOIN review re ON re.book_id = book.id WHERE t2.category_id in ?1" +
+            " AND book.language in ?2" +
+            " GROUP BY book.id HAVING AVG(re.value) >= ?3 ", nativeQuery = true)
+    ArrayList<Book> findAllBookByCategories( List<Long> categories,
+                                             List<String> languages,
+                                             int value);
 
 
 
