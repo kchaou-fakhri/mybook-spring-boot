@@ -64,7 +64,6 @@ public class BookController {
             book.setReview(reviewRepository.getReviewByBook(book.getId()));
             books.add(book);
         }
-
         return books;
     }
 
@@ -79,8 +78,9 @@ public class BookController {
 
         List<Book> books = new ArrayList<>() ;
 
-        for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
+        for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages(), filter.getReview())){
             if (!books.contains(book)){
+                book.setReview(reviewRepository.getReviewByBook(book.getId()));
                 books.add(book);
             }
         }

@@ -35,6 +35,7 @@ public class ReviewController {
 
     @GetMapping("review/by_book/{book_id}")
     Double getReview(@PathVariable("book_id") Long book_id){
+
         return reviewRepository.getReviewByBook(book_id);
     }
 
