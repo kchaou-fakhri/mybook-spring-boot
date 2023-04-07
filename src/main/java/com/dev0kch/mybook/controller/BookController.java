@@ -75,15 +75,27 @@ public class BookController {
     @GetMapping("book/by_all")
     public List<Book> findAllBookByCategoriesAndReviewAndLanguages(@RequestBody Filter filter){
 
+        // Check if review > 0 to filter with review else filter without review
 
         List<Book> books = new ArrayList<>() ;
-
-        for (Book book : bookRepository.findAllBookByCategoriesAndReviewAndLanguages(filter.getCategories(), filter.getLanguages(), filter.getReview())){
-            if (!books.contains(book)){
-                book.setReview(reviewRepository.getReviewByBook(book.getId()));
-                books.add(book);
+        if(filter.getReview() > 0){
+            for (Book book : bookRepository.findAllBookByCategoriesAndReviewAndLanguages(filter.getCategories(), filter.getLanguages(), filter.getReview())){
+                if (!books.contains(book)){
+                    book.setReview(reviewRepository.getReviewByBook(book.getId()));
+                    books.add(book);
+                }
             }
         }
+        else {
+
+            for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
+                if (!books.contains(book)){
+                    book.setReview(reviewRepository.getReviewByBook(book.getId()));
+                    books.add(book);
+                }
+            }
+        }
+
 
         return books;
     }
@@ -93,6 +105,7 @@ public class BookController {
 
 
         List<Book> books = new ArrayList<>() ;
+
 
         for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
             if (!books.contains(book)){
