@@ -80,19 +80,19 @@ public class BookController {
         List<Book> books = new ArrayList<>() ;
         if(filter.getReview() > 0){
             for (Book book : bookRepository.findAllBookByCategoriesAndReviewAndLanguages(filter.getCategories(), filter.getLanguages(), filter.getReview())){
-                if (!books.contains(book)){
+
                     book.setReview(reviewRepository.getReviewByBook(book.getId()));
                     books.add(book);
-                }
+
             }
         }
         else {
 
             for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
-                if (!books.contains(book)){
+
                     book.setReview(reviewRepository.getReviewByBook(book.getId()));
                     books.add(book);
-                }
+
             }
         }
 
