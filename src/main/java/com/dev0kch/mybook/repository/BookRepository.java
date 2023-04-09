@@ -1,15 +1,14 @@
 package com.dev0kch.mybook.repository;
 
 import com.dev0kch.mybook.model.Book;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
 
     @Query(value = "Select * FROM books  WHERE id = ?1", nativeQuery = true)
     Book _findById(Long id);
