@@ -10,7 +10,10 @@ import com.dev0kch.mybook.repository.CategoryRepository;
 import com.dev0kch.mybook.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -56,11 +59,12 @@ public class BookController {
         bookRepository.saveAll(books);
     }
 
-    @GetMapping("/books")
-    public List<Book> findAll(){
+    @GetMapping("/books/{page}")
+    public List<Book> findAll(@PathVariable("page") int page){
         ArrayList<Book> books = new ArrayList<>();
-
-        for (Book book : bookRepository.findAll()){
+        Pageable paging = PageRequest.of(
+                page, 5, Sort.by("id").ascending());
+        for (Book book : bookRepository.findAll(paging)){
             book.setReview(reviewRepository.getReviewByBook(book.getId()));
             books.add(book);
         }
@@ -80,19 +84,19 @@ public class BookController {
         List<Book> books = new ArrayList<>() ;
         if(filter.getReview() > 0){
             for (Book book : bookRepository.findAllBookByCategoriesAndReviewAndLanguages(filter.getCategories(), filter.getLanguages(), filter.getReview())){
-                if (!books.contains(book)){
+
                     book.setReview(reviewRepository.getReviewByBook(book.getId()));
                     books.add(book);
-                }
+
             }
         }
         else {
 
             for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
-                if (!books.contains(book)){
+
                     book.setReview(reviewRepository.getReviewByBook(book.getId()));
                     books.add(book);
-                }
+
             }
         }
 
