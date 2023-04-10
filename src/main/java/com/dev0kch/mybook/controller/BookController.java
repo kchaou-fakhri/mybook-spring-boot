@@ -63,7 +63,7 @@ public class BookController {
     public List<Book> findAll(@PathVariable("page") int page){
         ArrayList<Book> books = new ArrayList<>();
         Pageable paging = PageRequest.of(
-                page, 5, Sort.by("id").ascending());
+                page, 25, Sort.by("id").ascending());
         for (Book book : bookRepository.findAll(paging)){
             book.setReview(reviewRepository.getReviewByBook(book.getId()));
             books.add(book);
@@ -79,11 +79,23 @@ public class BookController {
     @GetMapping("book/by_all")
     public List<Book> findAllBookByCategoriesAndReviewAndLanguages(@RequestBody Filter filter){
 
-        // Check if review > 0 to filter with review else filter without review
+        ArrayList<Long> arrayCategoriesId = new ArrayList<>();
+        List<Category> categories = categoryRepository.findAll();
+        for (String categoryName : filter.getCategories()){
+            for (Category category : categories){
+                if (categoryName.equals(category.getCategoryName())){
+                    arrayCategoriesId.add(category.getId());
+                    break;
+                }
+            }
+        }
 
+        // Check if review > 0 to filter with review else filter without review
         List<Book> books = new ArrayList<>() ;
         if(filter.getReview() > 0){
-            for (Book book : bookRepository.findAllBookByCategoriesAndReviewAndLanguages(filter.getCategories(), filter.getLanguages(), filter.getReview())){
+            for (Book book : bookRepository.
+                    findAllBookByCategoriesAndReviewAndLanguages(arrayCategoriesId,
+                            filter.getLanguages(), filter.getReview(), filter.getPrice())){
 
                     book.setReview(reviewRepository.getReviewByBook(book.getId()));
                     books.add(book);
@@ -92,7 +104,7 @@ public class BookController {
         }
         else {
 
-            for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
+            for (Book book : bookRepository.findAllBookByCategories(arrayCategoriesId, filter.getLanguages(), filter.getPrice())){
 
                     book.setReview(reviewRepository.getReviewByBook(book.getId()));
                     books.add(book);
@@ -104,21 +116,6 @@ public class BookController {
         return books;
     }
 
-    @GetMapping("book/by_categories_languages")
-    public List<Book> findAllBookByCategoriesAndLanguages(@RequestBody Filter filter){
 
-
-        List<Book> books = new ArrayList<>() ;
-
-
-        for (Book book : bookRepository.findAllBookByCategories(filter.getCategories(), filter.getLanguages())){
-            if (!books.contains(book)){
-                book.setReview(reviewRepository.getReviewByBook(book.getId()));
-                books.add(book);
-            }
-        }
-
-        return books;
-    }
 
 }

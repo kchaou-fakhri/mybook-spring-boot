@@ -4,22 +4,25 @@ import java.util.List;
 
 public class Filter {
 
-    private List<Long> categories;
+    private List<String> categories;
     private List<String> languages;
 
     private int review;
 
-    public Filter(List<Long> categories, List<String> languages, int review) {
+    private int price;
+
+    public Filter(List<String> categories, List<String> languages, int review, int price) {
         this.categories = categories;
         this.languages = languages;
         this.review = review;
+        this.price = price;
     }
 
-    public List<Long> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Long> categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 
@@ -37,5 +40,13 @@ public class Filter {
 
     public void setReview(int review) {
         this.review = review;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
