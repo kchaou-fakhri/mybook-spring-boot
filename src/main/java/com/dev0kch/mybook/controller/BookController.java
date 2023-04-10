@@ -76,7 +76,7 @@ public class BookController {
         bookRepository.deleteById(id);
     }
 
-    @GetMapping("book/by_all")
+    @PostMapping("book/by_all")
     public List<Book> findAllBookByCategoriesAndReviewAndLanguages(@RequestBody Filter filter){
 
         ArrayList<Long> arrayCategoriesId = new ArrayList<>();
