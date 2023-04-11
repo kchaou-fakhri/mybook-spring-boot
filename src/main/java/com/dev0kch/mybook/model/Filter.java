@@ -1,5 +1,6 @@
 package com.dev0kch.mybook.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Filter {
@@ -22,7 +23,7 @@ public class Filter {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(ArrayList<String > categories) {
         this.categories = categories;
     }
 
