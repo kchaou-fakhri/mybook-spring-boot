@@ -81,18 +81,37 @@ public class BookController {
 
         ArrayList<Long> arrayCategoriesId = new ArrayList<>();
         List<Category> categories = categoryRepository.findAll();
-        for (String categoryName : filter.getCategories()){
+
+
+
+
+        if (filter.getLanguages().size()==0){
+            filter.setLanguages(List.of("ar","fr","sp","en"));
+        }
+        if(filter.getCategories().size()==0){
+
             for (Category category : categories){
-                if (categoryName.equals(category.getCategoryName())){
-                    arrayCategoriesId.add(category.getId());
-                    break;
+                arrayCategoriesId.add(category.getId());
+            }
+
+        }
+        else {
+            for (String categoryName : filter.getCategories()){
+                for (Category category : categories){
+                    if (categoryName.equals(category.getCategoryName())){
+                        arrayCategoriesId.add(category.getId());
+                        break;
+                    }
                 }
             }
         }
 
+
         // Check if review > 0 to filter with review else filter without review
         List<Book> books = new ArrayList<>() ;
         if(filter.getReview() > 0){
+
+
             for (Book book : bookRepository.
                     findAllBookByCategoriesAndReviewAndLanguages(arrayCategoriesId,
                             filter.getLanguages(), filter.getReview(), filter.getPrice())){
