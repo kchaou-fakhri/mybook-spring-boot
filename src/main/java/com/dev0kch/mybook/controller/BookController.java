@@ -5,15 +5,19 @@ package com.dev0kch.mybook.controller;
 import com.dev0kch.mybook.model.Book;
 import com.dev0kch.mybook.model.Category;
 import com.dev0kch.mybook.model.Filter;
+import com.dev0kch.mybook.model.User;
 import com.dev0kch.mybook.repository.BookRepository;
 import com.dev0kch.mybook.repository.CategoryRepository;
 import com.dev0kch.mybook.repository.ReviewRepository;
+import com.dev0kch.mybook.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -29,6 +33,10 @@ public class BookController {
 
     @Autowired
     ReviewRepository reviewRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
 
     @GetMapping("book/{id}")
     public Book findById(@PathVariable Long id){
@@ -135,6 +143,31 @@ public class BookController {
         return books;
     }
 
+
+    @PutMapping("book/buy/{book_id}/{user_id}")
+    public Book buyBook(  @PathVariable(name = "book_id") Long book_id, @PathVariable(name = "user_id") Long user_id){
+        Book book = bookRepository._findById(book_id);
+        User user = userRepository._findById(user_id);
+        book.buyBook(user);
+        return bookRepository.save(book);
+    }
+
+
+    @PostMapping("book/is_sold/{book_id}/{user_id}")
+    public String isSold(  @PathVariable(name = "book_id") Long book_id , @PathVariable(name = "user_id") Long user_id){
+        String result = "{ \"isSold\" : false}";
+        try {
+            ResultSet res = bookRepository.isSold(book_id, user_id);
+            if (res != null){
+                result = "{ \"isSold\" : true}";
+            }
+        }
+        catch (Exception e){
+
+        }
+
+        return result;
+    }
 
 
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -31,5 +32,8 @@ public class User {
     public void setD(long id) {
         this.id = id;
     }
+
+    @ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "users")
+    private Set<Book> books= new HashSet<>();
 
 }
