@@ -46,6 +46,14 @@ public class Book {
     )
     private List<Category> categories  = new ArrayList<>();
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "sold_books",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns =  @JoinColumn(name =  "user_id" )
+    )
+    private List<User> users  = new ArrayList<>();
 
 
 
@@ -81,6 +89,9 @@ public class Book {
 
     public void addCategory(Category category) {
         categories.add(category);
+    }
+    public void buyBook(User user) {
+        users.add(user);
     }
 
 

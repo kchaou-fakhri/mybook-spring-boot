@@ -4,6 +4,8 @@ import com.dev0kch.mybook.model.Book;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,11 @@ public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
     ArrayList<Book> findAllBookByCategories( List<Long> categories,
                                                                   List<String> languages, int price
                                                                   );
+
+    @Query(value = "SELECT DISTINCT sold_books.* FROM sold_books where book_id = ?1 AND user_id = ?2" ,
+            nativeQuery = true)
+    ResultSet isSold(Long book_id, Long user_id
+    );
 
 
 
